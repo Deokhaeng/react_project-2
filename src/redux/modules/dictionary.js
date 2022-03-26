@@ -1,4 +1,4 @@
-// // bucket.js
+// dictionary.js
 // import { db } from "../../firebase";
 // import {
 //   collection,
@@ -15,14 +15,13 @@
 // // const REMOVE = "my-app/widgets/REMOVE";
 // // const LOAD = "my-app/widgets/LOAD";
 // const LOAD = "bucket/LOAD";
-// const CREATE = "bucket/CREATE";
-// const UPDATE = "bucket/UPDATE";
-// const DELETE = "bucket/DELETE";
+const CREATE = "dictionary/CREATE";
+// const UPDATE = "dictionary/UPDATE";
+const DELETE = "dictionary/DELETE";
 // const LOADED = "bucket/LOADED";
 
 const initialState = {
   //   is_loaded: false,
-  list: [],
 
   // list: [
   //   { text: "영화관 가기", completed: false },
@@ -30,7 +29,13 @@ const initialState = {
   //   { text: "수영 배우기", completed: false },
   //   { text: "코딩하기", completed: false },
   // ],
-  // list: ["영화관 가기", "매일 책읽기", "수영 배우기", "코딩하기"],
+  list: [
+    {
+      word: "ㅎ1ㅎadsfdsfa1",
+      explanation: "히히를 변형한 단어. 숫자1을 | 로 쓴다.",
+      example: "저 친구가 초콜릿을 줬어.",
+    },
+  ],
 };
 
 // // Action Creators
@@ -38,19 +43,20 @@ const initialState = {
 //   return { type: LOAD, bucket_list };
 // }
 
-// export function createBucket(bucket) {
-//   console.log("액션을 생성할거야!");
-//   return { type: CREATE, bucket: bucket };
+export function createDictionary(dictionary) {
+  console.log("액션을 생성할거야!");
+  return { type: CREATE, dictionary };
+}
+
+// export function updateBucket(dictionary) {
+//   return { type: UPDATE, dictionary: dictionary };
+//   return { type: UPDATE, dictionary_index };
 // }
 
-// export function updateBucket(bucket_index) {
-//   return { type: UPDATE, bucket_index };
-// }
-
-// export function deleteBucket(bucket_index) {
-//   console.log("지울 버킷 인덱스", bucket_index);
-//   return { type: DELETE, bucket_index };
-// }
+export function deleteDictionary(dictionary_index) {
+  console.log("지울 사전 인덱스", dictionary_index);
+  return { type: DELETE, dictionary_index };
+}
 
 // export function isLoaded(loaded) {
 //   return { type: LOADED, loaded };
@@ -142,54 +148,56 @@ const initialState = {
 // };
 
 // // Reducer
-// export default function reducer(state = initialState, action = {}) {
-//   switch (action.type) {
-//     case "bucket/LOAD": {
-//       return { list: action.bucket_list, is_loaded: true };
-//     }
+export default function reducer(state = initialState, action = {}) {
+  switch (action.type) {
+    //     case "bucket/LOAD": {
+    //       return { list: action.bucket_list, is_loaded: true };
+    //     }
 
-//     case "bucket/CREATE": {
-//       console.log("이제 값을 바꿀거야!");
-//       const new_bucket_list = [...state.list, action.bucket];
-//       return { ...state, list: new_bucket_list, is_loaded: true };
-//     }
+    case "dictionary/CREATE": {
+      console.log("이제 값을 바꿀거야!");
+      const new_dictionary_list = [...state.list, action.dictionary];
+      console.log(new_dictionary_list);
+      return { list: new_dictionary_list };
 
-//     case "bucket/UPDATE": {
-//       const new_bucket_list = state.list.map((l, idx) => {
-//         if (parseInt(action.bucket_index) === idx) {
-//           return { ...l, completed: true };
-//         } else {
-//           return l;
-//         }
-//       });
-//       console.log({ list: new_bucket_list });
-//       return { ...state, list: new_bucket_list };
-//     }
+      // return { ...state, list: new_dictionary_list, is_loaded: true };
+    }
 
-//     case "bucket/DELETE": {
-//       console.log(state, action);
-//       const new_bucket_list = state.list.filter((l, idx) => {
-//         console.log(
-//           parseInt(action.bucket_index) !== idx,
-//           parseInt(action.bucket_index),
-//           idx
-//         );
-//         return parseInt(action.bucket_index) !== idx;
-//       });
+    // case "dictionary/UPDATE": {
+    //   const new_dictionary_list = state.list.map((l, idx) => {
+    //     if (parseInt(action.dictionary_index) === idx) {
+    //       return { ...l, completed: true };
+    //     } else {
+    //       return l;
+    //     }
+    //   });
+    //   console.log({ list: new_dictionary_list });
+    //   return { ...state, list: new_dictionary_list };
+    // }
 
-//       console.log(new_bucket_list);
-//       return { ...state, list: new_bucket_list };
-//     }
+    case "dictionary/DELETE": {
+      // console.log(state, action);
+      const new_dictionary_list = state.list.filter((l, idx) => {
+        return parseInt(action.bucket_index) !== idx;
+        // parseInt(action.bucket_index),
+        // idx
+      });
+      return { list: new_dictionary_list };
+    }
 
-//     case "bucket/LOADED": {
-//       return { ...state, is_loaded: action.loaded };
-//     }
+    //       console.log(new_bucket_list);
+    //       return { ...state, list: new_bucket_list };
+    //     }
 
-//     // do reducer stuff
-//     default:
-//       return state;
-//   }
-// }
+    //     case "bucket/LOADED": {
+    //       return { ...state, is_loaded: action.loaded };
+    //     }
+
+    // do reducer stuff
+    default:
+      return state;
+  }
+}
 
 // // side effects, only as applicable
 // // e.g. thunks, epics, etc

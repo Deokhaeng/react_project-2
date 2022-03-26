@@ -1,37 +1,37 @@
 import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+// import { createDictionary, addDictionary } from "./redux/modules/dictionary";
 
-const DictionaryList = () => {
+const DictionaryList = (props) => {
   const history = useHistory();
+
+  const dictionary_list = useSelector((state) => state.dictionary.list);
+  //리덕스에서 가져온 데이터
 
   return (
     <>
       <Title>MY DICTIONARY</Title>
       <CardWrap>
-        <WordCard>
-          <MiniTitle>단어</MiniTitle>
-          <p>ㅎ1ㅎ1</p>
-          {/* <GrayLine /> */}
-          <MiniTitle>설명</MiniTitle>
-          <div>히히를 변형한 단어. 숫자1을"|"로 쓴다.</div>
-          {/* <GrayLine /> */}
-          <MiniTitle>예시</MiniTitle>
-          <p>저 친구가 초콜릿을 줬어.</p>
-        </WordCard>
-        <WordCard>
-          <MiniTitle>단어</MiniTitle>
-          <p>ㅎ1ㅎ1</p>
-          {/* <GrayLine /> */}
-          <MiniTitle>설명</MiniTitle>
-          <div>히히를 변형한 단어. 숫자1을"|"로 쓴다.</div>
-          {/* <GrayLine /> */}
-          <MiniTitle>예시</MiniTitle>
-          <p>저 친구가 초콜릿을 줬어.</p>
-        </WordCard>
+        {dictionary_list.map((list, i) => {
+          return (
+            <WordCard key={i}>
+              <MiniTitle>단어</MiniTitle>
+              {list.word}
+              {/* <GrayLine /> */}
+              <MiniTitle>설명</MiniTitle>
+              {list.explanation}
+              {/* <GrayLine /> */}
+              <MiniTitle>예시</MiniTitle>
+              {list.example}
+            </WordCard>
+          );
+        })}
       </CardWrap>
       <WordBtn
         onClick={() => {
+          // addDictionary();
           history.push("/detail");
         }}
       >

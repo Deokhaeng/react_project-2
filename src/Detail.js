@@ -1,28 +1,42 @@
 import React from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { createDictionary } from "./redux/modules/dictionary";
 
 const Detail = () => {
-  const history = useHistory();
-  const text = React.useRef(null);
+  // const history = useHistory();
+  const word = React.useRef(null);
+  const explanation = React.useRef(null);
+  const example = React.useRef(null);
+  const dispatch = useDispatch();
+  const addDictionary = () => {
+    dispatch(
+      createDictionary({
+        word: word.current.value,
+        explanation: explanation.current.value,
+        example: example.current.value,
+      })
+    );
+  };
+
   return (
     <CardWrap>
       <WordCard>
         단어 추가하기
         <GrayLine />
         <MiniTitle>단어</MiniTitle>
-        <input type="text" ref={text} />
-        {/* <GrayLine /> */}
+        <input type="text" ref={word} />
         <MiniTitle>설명</MiniTitle>
-        <input type="text" ref={text} />
-        {/* <GrayLine /> */}
+        <input type="text" ref={explanation} />
         <MiniTitle>예시</MiniTitle>
-        <input type="text" ref={text} />
+        <input type="text" ref={example} />
       </WordCard>
       <WordBtn
-        onClick={() => {
-          history.goBack();
-        }}
+        // onClick={() => {
+        //   history.goBack();
+        // }}
+        onClick={addDictionary}
       >
         +
       </WordBtn>
