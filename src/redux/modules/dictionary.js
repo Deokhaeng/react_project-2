@@ -1,20 +1,17 @@
 // dictionary.js
-// import { db } from "../../firebase";
-// import {
-//   collection,
-//   doc,
-//   getDoc,
-//   getDocs,
-//   addDoc,
-//   updateDoc,
-//   deleteDoc,
-// } from "firebase/firestore";
+import { db } from "../../firebase";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
 // // Actions
-// // const UPDATE = "my-app/widgets/UPDATE";
-// // const REMOVE = "my-app/widgets/REMOVE";
-// // const LOAD = "my-app/widgets/LOAD";
-// const LOAD = "bucket/LOAD";
+const LOAD = "dictionary/LOAD";
 const CREATE = "dictionary/CREATE";
 // const UPDATE = "dictionary/UPDATE";
 const DELETE = "dictionary/DELETE";
@@ -22,16 +19,9 @@ const DELETE = "dictionary/DELETE";
 
 const initialState = {
   //   is_loaded: false,
-
-  // list: [
-  //   { text: "영화관 가기", completed: false },
-  //   { text: "매일 책읽기", completed: false },
-  //   { text: "수영 배우기", completed: false },
-  //   { text: "코딩하기", completed: false },
-  // ],
   list: [
     {
-      word: "ㅎ1ㅎadsfdsfa1",
+      word: "ㅎ1ㅎ1",
       explanation: "히히를 변형한 단어. 숫자1을 | 로 쓴다.",
       example: "저 친구가 초콜릿을 줬어.",
     },
@@ -39,9 +29,9 @@ const initialState = {
 };
 
 // // Action Creators
-// export function loadBucket(bucket_list) {
-//   return { type: LOAD, bucket_list };
-// }
+export function loadDictionary(dictionary_list) {
+  return { type: LOAD, dictionary_list };
+}
 
 export function createDictionary(dictionary) {
   console.log("액션을 생성할거야!");
@@ -62,58 +52,41 @@ export function deleteDictionary(dictionary_index) {
 //   return { type: LOADED, loaded };
 // }
 
-// // export function loadWidgets() {
-// //   return { type: LOAD };
-// // }
-
-// // export function createWidget(widget) {
-// //   // {widget: widget} == {widget}
-// //   return { type: CREATE, widget };
-// // }
-
-// // export function updateWidget(widget) {
-// //   return { type: UPDATE, widget };
-// // }
-
-// // export function removeWidget(widget) {
-// //   return { type: REMOVE, widget };
-// // }
-
 // // middlewares
-// export const loadBucketFB = () => {
-//   return async function (dispatch) {
-//     const bucket_data = await getDocs(collection(db, "bucket"));
-//     console.log(bucket_data);
+export const loadDictionaryFB = () => {
+  return async function (dispatch) {
+    const dictionary_data = await getDocs(collection(db, "dictionary"));
+    console.log(dictionary_data);
 
-//     let bucket_list = [];
+    let dictionary_list = [];
 
-//     bucket_data.forEach((b) => {
-//       console.log(b.data());
-//       bucket_list.push({ id: b.id, ...b.data() });
-//     });
-//     console.log(bucket_list);
+    dictionary_data.forEach((word) => {
+      console.log(word.data());
+      dictionary_list.push({ id: word.id, ...word.data() });
+    });
+    console.log(dictionary_list);
 
-//     dispatch(loadBucket(bucket_list));
-//   };
-// };
+    dispatch(loadDictionary(dictionary_list));
+  };
+};
 
-// export const addBucketFB = (bucket) => {
-//   return async function (dispatch) {
-//     dispatch(isLoaded(false));
-//     const docRef = await addDoc(collection(db, "bucket"), bucket);
-//     // const _bucket = await getDoc(docRef);
-//     const bucket_data = { id: docRef.id, ...bucket };
+export const addDictionaryFB = (dictionary) => {
+  return async function (dispatch) {
+    // dispatch(isLoaded(false));
+    const docRef = await addDoc(collection(db, "dictionary"), dictionary);
+    // const _bucket = await getDoc(docRef);
+    const dictionary_data = { id: docRef.id, ...dictionary };
 
-//     // const docRef = await addDoc(collection(db, "bucket"), bucket);
-//     // const _bucket = await getDoc(docRef);
-//     // const bucket_data = { id: _bucket.id, ..._bucket.data() };
+    // const docRef = await addDoc(collection(db, "bucket"), bucket);
+    // const _bucket = await getDoc(docRef);
+    // const bucket_data = { id: _bucket.id, ..._bucket.data() };
 
-//     // console.log((await getDoc(docRef)).data());
-//     // console.log(bucket_data);
+    // console.log((await getDoc(docRef)).data());
+    // console.log(bucket_data);
 
-//     dispatch(createBucket(bucket_data));
-//   };
-// };
+    dispatch(createDictionary(dictionary_data));
+  };
+};
 
 // export const updateBucketFB = (bucket_id) => {
 //   return async function (dispatch, getState) {
@@ -150,9 +123,9 @@ export function deleteDictionary(dictionary_index) {
 // // Reducer
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    //     case "bucket/LOAD": {
-    //       return { list: action.bucket_list, is_loaded: true };
-    //     }
+    case "dictionary/LOAD": {
+      return { list: action.dictionary_list };
+    }
 
     case "dictionary/CREATE": {
       console.log("이제 값을 바꿀거야!");

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 // import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { createDictionary } from "./redux/modules/dictionary";
+import { addDictionaryFB } from "./redux/modules/dictionary";
 
 const Detail = () => {
   // const history = useHistory();
@@ -12,7 +12,7 @@ const Detail = () => {
   const dispatch = useDispatch();
   const addDictionary = () => {
     dispatch(
-      createDictionary({
+      addDictionaryFB({
         word: word.current.value,
         explanation: explanation.current.value,
         example: example.current.value,

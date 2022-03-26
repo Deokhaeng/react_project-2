@@ -2,21 +2,29 @@ import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { loadDictionaryFB } from "./redux/modules/dictionary";
+import { useDispatch } from "react-redux";
+
 // import { createDictionary, addDictionary } from "./redux/modules/dictionary";
 
 const DictionaryList = (props) => {
   const history = useHistory();
-
+  const dispatch = useDispatch();
   const dictionary_list = useSelector((state) => state.dictionary.list);
+  console.log(dictionary_list);
   //리덕스에서 가져온 데이터
+
+  React.useEffect(async () => {
+    dispatch(loadDictionaryFB());
+  }, []);
 
   return (
     <>
       <Title>MY DICTIONARY</Title>
       <CardWrap>
-        {dictionary_list.map((list, i) => {
+        {dictionary_list.map((list, id) => {
           return (
-            <WordCard key={i}>
+            <WordCard key={id}>
               <MiniTitle>단어</MiniTitle>
               {list.word}
               {/* <GrayLine /> */}
