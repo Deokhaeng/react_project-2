@@ -24,7 +24,7 @@ const DictionaryList = (props) => {
               {list.explanation}
               {/* <GrayLine /> */}
               <MiniTitle>예시</MiniTitle>
-              {list.example}
+              <div style={{ color: "#0a9aa2" }}>{list.example}</div>
             </WordCard>
           );
         })}
