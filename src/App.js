@@ -1,20 +1,24 @@
 import React from "react";
 import styled from "styled-components";
 import DictionaryList from "./DictionaryList";
-import Detail from "./Detail";
-import NotFound from "./NotFound";
-// import Spinner from "./Spinner";
-// import NotFound from "./NotFound";
-// import Progress from "./Progress";
+import AddWord from "./AddWord";
+import EditWord from "./EditWord";
+import { useSelector } from "react-redux";
 import { Route } from "react-router-dom";
 
 function App() {
+  const dictionary_list = useSelector((state) => state.dictionary.list);
+  console.log(dictionary_list);
+
   return (
     <AppWrap>
       <Route></Route>
       <Container>
-        <Route path="/detail" exact>
-          <Detail />
+        <Route path="/addWord" exact>
+          <AddWord />
+        </Route>
+        <Route path="/editWord/:index" exact>
+          <EditWord />
         </Route>
         <Route path="/" exact>
           <DictionaryList />

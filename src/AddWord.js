@@ -1,24 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addDictionaryFB } from "./redux/modules/dictionary";
 
-const Detail = () => {
-  // const history = useHistory();
+const AddWord = () => {
+  const history = useHistory();
   const word = React.useRef(null);
   const explanation = React.useRef(null);
   const example = React.useRef(null);
   const dispatch = useDispatch();
-  const addDictionary = () => {
-    dispatch(
-      addDictionaryFB({
-        word: word.current.value,
-        explanation: explanation.current.value,
-        example: example.current.value,
-      })
-    );
-  };
 
   return (
     <CardWrap>
@@ -33,10 +24,16 @@ const Detail = () => {
         <input type="text" ref={example} />
       </WordCard>
       <WordBtn
-        // onClick={() => {
-        //   history.goBack();
-        // }}
-        onClick={addDictionary}
+        onClick={() => {
+          history.goBack();
+          dispatch(
+            addDictionaryFB({
+              word: word.current.value,
+              explanation: explanation.current.value,
+              example: example.current.value,
+            })
+          );
+        }}
       >
         +
       </WordBtn>
@@ -98,4 +95,4 @@ const WordBtn = styled.button`
   font-size: 40px;
 `;
 
-export default Detail;
+export default AddWord;

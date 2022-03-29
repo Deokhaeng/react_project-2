@@ -13,19 +13,11 @@ import {
 // // Actions
 const LOAD = "dictionary/LOAD";
 const CREATE = "dictionary/CREATE";
-// const UPDATE = "dictionary/UPDATE";
+const UPDATE = "dictionary/UPDATE";
 const DELETE = "dictionary/DELETE";
-// const LOADED = "bucket/LOADED";
 
 const initialState = {
-  //   is_loaded: false,
-  list: [
-    {
-      word: "ㅎ1ㅎ1",
-      explanation: "히히를 변형한 단어. 숫자1을 | 로 쓴다.",
-      example: "저 친구가 초콜릿을 줬어.",
-    },
-  ],
+  list: [],
 };
 
 // // Action Creators
@@ -38,87 +30,71 @@ export function createDictionary(dictionary) {
   return { type: CREATE, dictionary };
 }
 
-// export function updateBucket(dictionary) {
-//   return { type: UPDATE, dictionary: dictionary };
-//   return { type: UPDATE, dictionary_index };
-// }
+export function updateDictionary(dictionary_index) {
+  return { type: UPDATE, dictionary_index };
+}
 
 export function deleteDictionary(dictionary_index) {
   console.log("지울 사전 인덱스", dictionary_index);
   return { type: DELETE, dictionary_index };
 }
 
-// export function isLoaded(loaded) {
-//   return { type: LOADED, loaded };
-// }
-
 // // middlewares
 export const loadDictionaryFB = () => {
   return async function (dispatch) {
     const dictionary_data = await getDocs(collection(db, "dictionary"));
-    console.log(dictionary_data);
 
     let dictionary_list = [];
 
     dictionary_data.forEach((word) => {
-      console.log(word.data());
       dictionary_list.push({ id: word.id, ...word.data() });
     });
-    console.log(dictionary_list);
-
     dispatch(loadDictionary(dictionary_list));
   };
 };
 
 export const addDictionaryFB = (dictionary) => {
   return async function (dispatch) {
-    // dispatch(isLoaded(false));
     const docRef = await addDoc(collection(db, "dictionary"), dictionary);
-    // const _bucket = await getDoc(docRef);
-    const dictionary_data = { id: docRef.id, ...dictionary };
-
-    // const docRef = await addDoc(collection(db, "bucket"), bucket);
-    // const _bucket = await getDoc(docRef);
-    // const bucket_data = { id: _bucket.id, ..._bucket.data() };
-
-    // console.log((await getDoc(docRef)).data());
-    // console.log(bucket_data);
-
-    dispatch(createDictionary(dictionary_data));
+    const _dictionary = await getDoc(docRef);
+    const dictionary_data = { id: _dictionary.id, ..._dictionary.data() };
   };
 };
 
-// export const updateBucketFB = (bucket_id) => {
-//   return async function (dispatch, getState) {
-//     const docRef = doc(db, "bucket", bucket_id);
-//     await updateDoc(docRef, { completed: true });
-//     // console.log(bucket_id);
-//     console.log(getState().bucket);
-//     const _bucket_list = getState().bucket.list;
-//     const bucket_index = _bucket_list.findIndex((b) => {
-//       return b.id === bucket_id;
-//     });
-//     dispatch(updateBucket(bucket_index));
-//     // console.log(bucket_index);
-//   };
-// };
+export const updateDictionaryFB = (dictionary_data) => {
+  return async function (dispatch, getState) {
+    const docRef = doc(db, "dictionary", dictionary_data.id);
+    await updateDoc(docRef, {
+      word: dictionary_data.word,
+      example: dictionary_data.example,
+      explanation: dictionary_data.explanation,
+    });
 
-// export const deleteBucketFB = (bucket_id) => {
-//   return async function (dispatch, getState) {
-//     if (!bucket_id) {
-//       window.alert("아이디가 없네요!");
-//       return;
-//     }
-//     const docRef = doc(db, "bucket", bucket_id);
-//     await deleteDoc(docRef);
+    const _dictionary_list = getState().dictionary.list;
+    const dictionary_index = _dictionary_list.findIndex((d) => {
+      return d.id === dictionary_data.id;
+    });
 
-//     const _bucket_list = getState().bucket.list;
-//     const bucket_index = _bucket_list.findIndex((b) => {
-//       return b.id === bucket_id;
-//     });
-//     dispatch(deleteBucket(bucket_index));
-//   };
-// };
+    dispatch(updateDictionary(dictionary_index));
+  };
+};
+
+export const deleteDictionaryFB = (dictionary_id) => {
+  return async function (dispatch, getState) {
+    if (!dictionary_id) {
+      window.alert("아이디가 없네요!");
+      return;
+    }
+    const docRef = doc(db, "dictionary", dictionary_id);
+    await deleteDoc(docRef);
+
+    const _dictionary_list = getState().dictionary.list;
+    const dictionary_index = _dictionary_list.findIndex((d) => {
+      return d.id === dictionary_id;
+    });
+    dispatch(deleteDictionary(dictionary_index));
+  };
+};
 
 // // Reducer
 export default function reducer(state = initialState, action = {}) {
@@ -128,53 +104,31 @@ export default function reducer(state = initialState, action = {}) {
     }
 
     case "dictionary/CREATE": {
-      console.log("이제 값을 바꿀거야!");
       const new_dictionary_list = [...state.list, action.dictionary];
-      console.log(new_dictionary_list);
       return { list: new_dictionary_list };
-
-      // return { ...state, list: new_dictionary_list, is_loaded: true };
     }
 
-    // case "dictionary/UPDATE": {
-    //   const new_dictionary_list = state.list.map((l, idx) => {
-    //     if (parseInt(action.dictionary_index) === idx) {
-    //       return { ...l, completed: true };
-    //     } else {
-    //       return l;
-    //     }
-    //   });
-    //   console.log({ list: new_dictionary_list });
-    //   return { ...state, list: new_dictionary_list };
-    // }
+    case "dictionary/UPDATE": {
+      const new_dictionary_list = state.list.map((l, idx) => {
+        if (parseInt(action.dictionary_index) === idx) {
+          return {
+            ...l,
+          };
+        } else {
+          return l;
+        }
+      });
+      console.log({ list: new_dictionary_list });
+      return { ...state, list: new_dictionary_list };
+    }
 
     case "dictionary/DELETE": {
-      // console.log(state, action);
       const new_dictionary_list = state.list.filter((l, idx) => {
-        return parseInt(action.bucket_index) !== idx;
-        // parseInt(action.bucket_index),
-        // idx
+        return parseInt(action.dictionary_index) !== idx;
       });
       return { list: new_dictionary_list };
     }
-
-    //       console.log(new_bucket_list);
-    //       return { ...state, list: new_bucket_list };
-    //     }
-
-    //     case "bucket/LOADED": {
-    //       return { ...state, is_loaded: action.loaded };
-    //     }
-
-    // do reducer stuff
     default:
       return state;
   }
 }
-
-// // side effects, only as applicable
-// // e.g. thunks, epics, etc
-// export function getWidget() {
-//   return (dispatch) =>
-//     get("/widget").then((widget) => dispatch(updateWidget(widget)));
-// }
