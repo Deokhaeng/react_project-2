@@ -3,13 +3,9 @@ import styled from "styled-components";
 import DictionaryList from "./DictionaryList";
 import AddWord from "./AddWord";
 import EditWord from "./EditWord";
-import { useSelector } from "react-redux";
 import { Route } from "react-router-dom";
 
 function App() {
-  const dictionary_list = useSelector((state) => state.dictionary.list);
-  console.log(dictionary_list);
-
   return (
     <AppWrap>
       <Route></Route>
