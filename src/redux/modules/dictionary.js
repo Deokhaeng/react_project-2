@@ -100,7 +100,11 @@ export const deleteDictionaryFB = (dictionary_id) => {
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case "dictionary/LOAD": {
-      return { list: action.dictionary_list };
+      return {
+        list: action.dictionary_list.sort((a, b) =>
+          a.word.localeCompare(b.word)
+        ),
+      };
     }
 
     case "dictionary/CREATE": {
@@ -118,7 +122,7 @@ export default function reducer(state = initialState, action = {}) {
           return l;
         }
       });
-      console.log({ list: new_dictionary_list });
+
       return { ...state, list: new_dictionary_list };
     }
 
