@@ -1,4 +1,5 @@
 import React from "react";
+import { TiPlus } from "react-icons/ti";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -23,7 +24,7 @@ const AddWord = () => {
         <MiniTitle>예시</MiniTitle>
         <input type="text" ref={example} />
       </WordCard>
-      <WordBtn
+      <AddBtn
         onClick={() => {
           history.goBack();
           dispatch(
@@ -35,8 +36,8 @@ const AddWord = () => {
           );
         }}
       >
-        +
-      </WordBtn>
+        <IconAdd />
+      </AddBtn>
     </CardWrap>
   );
 };
@@ -85,14 +86,27 @@ const MiniTitle = styled.p`
   border-radius: 15px;
 `;
 
-const WordBtn = styled.button`
+const IconAdd = styled(TiPlus)`
+  font-size: 30px;
+`;
+
+const AddBtn = styled.button`
   width: 50px;
   height: 50px;
   border-radius: 25px;
   border: 1px solid transparent;
-  margin: 0px 0px -40px 0px;
+  margin: -5px 0px -45px 1px;
   color: #cecece;
-  font-size: 40px;
+
+  ${IconAdd} {
+    transition: transform 300ms ease-in-out;
+  }
+
+  &:hover {
+    ${IconAdd} {
+      transform: rotate(90deg);
+    }
+  }
 `;
 
 export default AddWord;

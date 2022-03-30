@@ -1,4 +1,5 @@
 import React from "react";
+import { TiPlus } from "react-icons/ti";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,8 +7,7 @@ import {
   updateDictionaryFB,
   loadDictionaryFB,
 } from "./redux/modules/dictionary";
-
-const EditWord = () => {
+const EditWord = (props) => {
   const history = useHistory();
   const word = React.useRef(null);
   const explanation = React.useRef(null);
@@ -16,10 +16,11 @@ const EditWord = () => {
   const dispatch = useDispatch();
   const dictionary_list = useSelector((state) => state.dictionary.list);
   const dictionary_index = params.index;
+  console.log(dictionary_list);
   React.useEffect(async () => {
     dispatch(loadDictionaryFB());
   }, []);
-  console.log(loadDictionaryFB);
+
   return (
     <>
       <CardWrap>
@@ -30,22 +31,22 @@ const EditWord = () => {
           <input
             type="text"
             ref={word}
-            placeholder={dictionary_list[dictionary_index].word}
+            defaultValue={dictionary_list[dictionary_index]?.word}
           />
           <MiniTitle>설명</MiniTitle>
           <input
             type="text"
             ref={explanation}
-            placeholder={dictionary_list[dictionary_index].explanation}
+            defaultValue={dictionary_list[dictionary_index]?.explanation}
           />
           <MiniTitle>예시</MiniTitle>
           <input
             type="text"
             ref={example}
-            placeholder={dictionary_list[dictionary_index].example}
+            defaultValue={dictionary_list[dictionary_index]?.example}
           />
         </WordCard>
-        <WordBtn
+        <EditBtn
           onClick={() => {
             history.goBack();
             dispatch(
@@ -58,8 +59,8 @@ const EditWord = () => {
             );
           }}
         >
-          +
-        </WordBtn>
+          <IconAdd />
+        </EditBtn>
       </CardWrap>
     </>
   );
@@ -109,14 +110,27 @@ const MiniTitle = styled.p`
   border-radius: 15px;
 `;
 
-const WordBtn = styled.button`
+const IconAdd = styled(TiPlus)`
+  font-size: 30px;
+`;
+
+const EditBtn = styled.button`
   width: 50px;
   height: 50px;
   border-radius: 25px;
   border: 1px solid transparent;
-  margin: 0px 0px -40px 0px;
+  margin: -5px 0px -50px 0px;
   color: #cecece;
-  font-size: 40px;
+
+  ${IconAdd} {
+    transition: transform 300ms ease-in-out;
+  }
+
+  &:hover {
+    ${IconAdd} {
+      transform: rotate(90deg);
+    }
+  }
 `;
 
 export default EditWord;
